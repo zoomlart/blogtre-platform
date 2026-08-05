@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -15,30 +16,42 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::factory()->createQuietly([
+        $admin = User::query()->updateOrCreate(['email' => 'admin@bianity.me'], [
             'name' => 'Bianity',
             'username' => 'admin',
-            'email' => 'admin@bianity.me',
-            'password' => bcrypt('12345678'),
-        ])->assignRole('administrator')->profile()->save(Profile::factory()->make());
+            'email_verified_at' => now(),
+            'password' => Hash::make('12345678'),
+        ]);
+        $admin->assignRole('administrator');
+        $admin->profile()->firstOrCreate([], Profile::factory()->make()->toArray());
 
-        User::factory()->createQuietly([
+        $moderator = User::query()->updateOrCreate(['email' => 'moder@bianity.me'], [
             'name' => 'Lord Moder',
             'username' => 'moder',
-            'email' => 'moder@bianity.me',
-            'password' => bcrypt('12345678'),
-        ])->assignRole('moderator')->profile()->save(Profile::factory()->make());
+            'email_verified_at' => now(),
+            'password' => Hash::make('12345678'),
+        ]);
+        $moderator->assignRole('moderator');
+        $moderator->profile()->firstOrCreate([], Profile::factory()->make()->toArray());
 
-        User::factory()->createQuietly([
+        $editor = User::query()->updateOrCreate(['email' => 'editor@bianity.me'], [
             'name' => 'Editor',
             'username' => 'editor',
-            'email' => 'editor@bianity.me',
-            'password' => bcrypt('12345678'),
-        ])->assignRole('editor')->profile()->save(Profile::factory()->make());
+            'email_verified_at' => now(),
+            'password' => Hash::make('12345678'),
+        ]);
+        $editor->assignRole('editor');
+        $editor->profile()->firstOrCreate([], Profile::factory()->make()->toArray());
 
-        User::factory(5)->create()->each(function ($user) {
+        if (User::query()->count() < 8) {
+            User::factory(5)->create()->each(function ($user) {
+                $user->profile()->save(Profile::factory()->make());
+                $user->assignRole('author');
+            });
+        }
+
+        User::query()->doesntHave('profile')->get()->each(function (User $user) {
             $user->profile()->save(Profile::factory()->make());
-            $user->assignRole('author');
         });
     }
 }

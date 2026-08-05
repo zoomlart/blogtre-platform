@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CommunityResource\Pages;
+use App\Filament\Resources\CommunityResource\RelationManagers;
 use App\Models\Community;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -162,7 +163,7 @@ class CommunityResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\StoriesRelationManager::class,
         ];
     }
 

@@ -25,7 +25,13 @@ class Form extends Component
 
     protected $listeners = [
         'refresh' => '$refresh',
+        'openAddPollModal' => 'openAddPollModal',
     ];
+
+    public function openAddPollModal()
+    {
+        $this->addPollModal = true;
+    }
 
     public function getRules()
     {

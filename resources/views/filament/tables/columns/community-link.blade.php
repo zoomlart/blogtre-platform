@@ -1,4 +1,4 @@
-<a href="{{ route('community.show', $getRecord()->slug) }}" class="flex justify-center"
+<a href="{{ route('community.show', ['community' => $getRecord()->slug]) }}" class="flex justify-center"
     target="_blank">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
         class="h-5 w-5 text-gray-300 hover:text-primary-600 dark:text-gray-600 dark:hover:text-primary-500">

@@ -13,23 +13,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        if (env('DEMO_MODE') === false && app()->environment('production')) {
-            $this->call([
-                RolesSeeder::class,
-                PermissionsSeeder::class,
-                PageSeeder::class,
-            ]);
-        }
+        $this->call([
+            RolesSeeder::class,
+            PermissionsSeeder::class,
+            UserSeeder::class,
+            CommunitySeeder::class,
+            PageSeeder::class,
+            TagSeeder::class,
+        ]);
 
-        if (env('DEMO_MODE') === true && app()->environment('local')) {
+        if (filter_var(env('DEMO_MODE', false), FILTER_VALIDATE_BOOLEAN)) {
             $this->call([
-                RolesSeeder::class,
-                PermissionsSeeder::class,
-                UserSeeder::class,
-                CommunitySeeder::class,
-                PageSeeder::class,
                 StorySeeder::class,
-                TagSeeder::class,
             ]);
         }
     }

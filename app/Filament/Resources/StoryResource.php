@@ -7,13 +7,16 @@ use App\Filament\Resources\StoryResource\RelationManagers;
 use App\Models\Story;
 use Archilex\ToggleIconColumn\Columns\ToggleIconColumn;
 use Carbon\Carbon;
+use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Form;
 use Filament\Infolists\Components;
 use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Enums\FiltersLayout;
@@ -59,7 +62,127 @@ class StoryResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([]);
+            ->schema([
+                Forms\Components\Group::make()
+                    ->schema([
+                        Forms\Components\Section::make(__('Story'))
+                            ->schema([
+                                Forms\Components\Select::make('user_id')
+                                    ->label(__('Author'))
+                                    ->relationship('author', 'username')
+                                    ->searchable()
+                                    ->preload()
+                                    ->default(auth()->id())
+                                    ->required(),
+
+                                Forms\Components\Select::make('community_id')
+                                    ->label(__('Community'))
+                                    ->relationship('community', 'name')
+                                    ->searchable()
+                                    ->preload()
+                                    ->nullable(),
+
+                                Forms\Components\TextInput::make('title')
+                                    ->label(__('Title'))
+                                    ->required()
+                                    ->minLength(10)
+                                    ->maxLength(160)
+                                    ->live(onBlur: true)
+                                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null),
+
+                                Forms\Components\TextInput::make('slug')
+                                    ->label(__('Slug'))
+                                    ->required()
+                                    ->maxLength(255)
+                                    ->unique(Story::class, 'slug', ignoreRecord: true),
+
+                                Forms\Components\TextInput::make('subtitle')
+                                    ->label(__('Subtitle'))
+                                    ->maxLength(250)
+                                    ->columnSpan('full'),
+
+                                Forms\Components\Textarea::make('summary')
+                                    ->label(__('Summary'))
+                                    ->autosize()
+                                    ->maxLength(500)
+                                    ->columnSpan('full'),
+
+                                Forms\Components\RichEditor::make('body_rendered')
+                                    ->label(__('Content'))
+                                    ->required()
+                                    ->fileAttachmentsDisk(getCurrentDisk())
+                                    ->fileAttachmentsDirectory('stories')
+                                    ->columnSpan('full'),
+                            ])
+                            ->columns(2),
+
+                        Forms\Components\Section::make(__('SEO'))
+                            ->schema([
+                                Forms\Components\TextInput::make('meta.meta_title')
+                                    ->label(__('Meta title'))
+                                    ->maxLength(60),
+                                Forms\Components\Textarea::make('meta.meta_description')
+                                    ->label(__('Meta description'))
+                                    ->autosize()
+                                    ->maxLength(156),
+                                Forms\Components\TextInput::make('meta.meta_keywords')
+                                    ->label(__('Meta keywords')),
+                                Forms\Components\TextInput::make('meta.meta_canonical_url')
+                                    ->label(__('Canonical URL'))
+                                    ->url(),
+                            ])
+                            ->columns(2)
+                            ->collapsible(),
+                    ])
+                    ->columnSpan(['lg' => 2]),
+
+                Forms\Components\Group::make()
+                    ->schema([
+                        Forms\Components\Section::make(__('Publishing'))
+                            ->schema([
+                                Forms\Components\DateTimePicker::make('approved_at')
+                                    ->label(__('Approved at'))
+                                    ->seconds(false)
+                                    ->visible(fn (): bool => auth()->user()->can('add_featured_story')),
+                                Forms\Components\DateTimePicker::make('published_at')
+                                    ->label(__('Published at'))
+                                    ->seconds(false)
+                                    ->visible(fn (): bool => auth()->user()->can('add_featured_story')),
+                                Forms\Components\Select::make('content_visibility')
+                                    ->label(__('Story content visibility'))
+                                    ->options([
+                                        'All' => __('Everyone'),
+                                        'Auth' => __('Only registered users'),
+                                    ])
+                                    ->default('All')
+                                    ->required(),
+                                Forms\Components\Select::make('comment_visibility')
+                                    ->label(__('Comments visibility'))
+                                    ->options([
+                                        'Allow' => __('Allow'),
+                                        'Disable' => __('Disable'),
+                                    ])
+                                    ->default('Allow')
+                                    ->required(),
+                                Forms\Components\Toggle::make('featured')
+                                    ->label(__('Featured'))
+                                    ->visible(fn (): bool => auth()->user()->can('add_featured_story')),
+                                Forms\Components\Toggle::make('is_pinned')
+                                    ->label(__('Pinned')),
+                            ]),
+
+                        Forms\Components\Section::make(__('Featured image'))
+                            ->schema([
+                                SpatieMediaLibraryFileUpload::make('featured_image')
+                                    ->label(__('Featured image'))
+                                    ->collection('featured-image')
+                                    ->image()
+                                    ->imageEditor(),
+                            ]),
+                    ])
+                    ->columnSpan(['lg' => 1]),
+            ])
+            ->columns(3);
     }
 
     public static function table(Table $table): Table
@@ -101,6 +224,7 @@ class StoryResource extends Resource
                     ->alignCenter()
                     ->onIcon('heroicon-s-star')
                     ->offIcon('heroicon-o-star')
+                    ->disabled(fn (): bool => ! auth()->user()->can('add_featured_story'))
                     ->sortable(),
             ])->defaultSort('id', 'desc')
             ->filters([
@@ -159,6 +283,19 @@ class StoryResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ], layout: FiltersLayout::AboveContentCollapsible)->filtersFormColumns(4)
             ->actions([
+                Action::make('approve')
+                    ->label(__('Approve'))
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->visible(fn (Story $record): bool => $record->approved_at === null && auth()->user()->can('add_featured_story'))
+                    ->requiresConfirmation()
+                    ->action(function (Story $record): void {
+                        $record->forceFill([
+                            'approved_at' => now(),
+                            'published_at' => $record->published_at ?? now(),
+                        ])->save();
+                    }),
+                Tables\Actions\EditAction::make()->label(false)->size('md')->tooltip(__('Edit')),
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\DeleteAction::make()->label(false)->size('md')->tooltip(__('Delete')),
             ])
@@ -235,7 +372,9 @@ class StoryResource extends Resource
     {
         return [
             'index' => Pages\ListStories::route('/'),
+            'create' => Pages\CreateStory::route('/create'),
             'view' => Pages\ViewStory::route('/{record}'),
+            'edit' => Pages\EditStory::route('/{record}/edit'),
         ];
     }
 

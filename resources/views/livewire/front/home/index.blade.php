@@ -1,7 +1,7 @@
 <div
-    class="relative mx-auto flex w-full pt-6 md:grid md:grid-cols-main-md md:gap-2 md:px-2 lg:max-w-7xl lg:grid-cols-main lg:gap-4">
+    class="relative mx-auto flex w-full pt-6 md:grid md:grid-cols-main-md md:gap-2 md:px-2 lg:grid-cols-main lg:gap-4">
     <x-menu.main />
-    <div class="block w-full max-w-3xl">
+    <div class="block w-full max-w-3xl mx-auto">
         <div class="mb-5 px-1 sm:mb-3 sm:px-0">
             <div x-data="{ activeTab: 'Today', active: @entangle('selectedPeriod').live }"
                 class="col-span-full grid w-full grid-cols-4 rounded-lg bg-slate-200 p-1 text-slate-600 dark:bg-slate-800 dark:text-slate-200">
@@ -58,7 +58,7 @@
             </div>
         @endif
     </div>
-    <aside class="hidden space-y-4 lg:block">
+    <aside class="hidden space-y-4 lg:block ">
         @if (App\Models\Story::published()->count() != 0)
             <x-widgets.top-authors />
             <x-widgets.popular-tags />

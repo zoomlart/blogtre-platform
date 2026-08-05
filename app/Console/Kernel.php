@@ -16,9 +16,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-    protected function article(Schedule $content)
-    {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('inspire')->hourly();
+        $schedule->command('queue:work --stop-when-empty')->everyMinute()->withoutOverlapping();
+        $schedule->command('app:update-user-level')->daily();
+        $schedule->command('app:update-user-membership-years-badge')->daily();
+        $schedule->command('app:update-sitemap')->daily();
+        $schedule->command('disposable:update')->weekly();
         // $schedule->command('db:prune', ['--model' => Notification::class])->daily();
     }
 

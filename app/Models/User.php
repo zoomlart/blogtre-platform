@@ -281,7 +281,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, Filamen
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return auth()->user()->hasRole('administrator');
+        return $this->can('access_admin_dashboard');
     }
 
     public function getFilamentName(): string

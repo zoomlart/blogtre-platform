@@ -10,10 +10,13 @@ class CreateSettingsTable extends Migration
     {
         Schema::create('settings', function (Blueprint $table): void {
             $table->id();
-            $table->string('name')->unique();
-            $table->mediumText('val')->nullable();
-            $table->string('group')->default('private');
+            $table->string('group');
+            $table->string('name');
+            $table->boolean('locked')->default(false);
+            $table->json('payload');
             $table->timestamps();
+
+            $table->unique(['group', 'name']);
         });
     }
 

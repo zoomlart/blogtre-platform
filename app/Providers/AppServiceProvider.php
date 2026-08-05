@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use WireUi\WireUiBladeDirectives;
 
 class AppServiceProvider extends ServiceProvider
@@ -39,16 +38,12 @@ class AppServiceProvider extends ServiceProvider
         });
 
         try {
-            View::share('generalSettings', new GeneralSettings());
+            $generalSettings = new GeneralSettings();
+            View::share('generalSettings', $generalSettings);
             View::share('advancedSettings', new AdvancedSettings());
             View::share('seoSettings', new SeoSettings());
-        } catch (\PDOException $e) {
-            throw new HttpException(500, $e->getMessage());
-        }
-
-        try {
-            $site_language = app(GeneralSettings::class)->site_language ?? 'en';
-        } catch (\PDOException $e) {
+            $site_language = $generalSettings->site_language ?? 'en';
+        } catch (\Throwable $e) {
             $site_language = 'en';
         }
 

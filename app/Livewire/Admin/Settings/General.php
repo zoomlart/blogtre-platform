@@ -34,8 +34,8 @@ class General extends Component implements HasForms
             'site_logo' => $settings->site_logo,
             'site_logo_dark' => $settings->site_logo_dark,
             'site_favicon' => $settings->site_favicon,
-            'default_feed' => config('alma.default_feed'),
-            'default_font' => config('alma.default_font'),
+            'default_feed' => config('bianity.default_feed'),
+            'default_font' => config('bianity.default_font'),
         ];
 
         $this->form->fill($settings);
@@ -156,40 +156,49 @@ class General extends Component implements HasForms
 
     public function store(GeneralSettings $settings)
     {
-        if ($this->form->getState()['site_name']) {
-            $settings->site_name = $this->form->getState()['site_name'];
+        $state = $this->form->getState();
+
+        if ($state['site_name'] ?? null) {
+            $settings->site_name = $state['site_name'];
             $settings->save();
         }
 
-        if ($this->form->getState()['site_language']) {
-            $settings->site_language = $this->form->getState()['site_language'];
+        if ($state['site_language'] ?? null) {
+            $settings->site_language = $state['site_language'];
             $settings->save();
         }
 
-        if ($this->form->getState()['site_maintenance_mode'] === true) {
-            $settings->site_maintenance_mode = $this->form->getState()['site_maintenance_mode'];
-            $settings->save();
-            Artisan::call('down');
-        } else {
-            $settings->site_maintenance_mode = $this->form->getState()['site_maintenance_mode'];
-            $settings->save();
-            Artisan::call('up');
+        $maintenanceMode = (bool) ($state['site_maintenance_mode'] ?? false);
+        $maintenanceCommandExitCode = Artisan::call($maintenanceMode ? 'down' : 'up');
+
+        if ($maintenanceCommandExitCode !== 0) {
+            Notification::make()
+                ->danger()
+                ->title(__('Maintenance mode could not be updated'))
+                ->body(Artisan::output())
+                ->seconds(10)
+                ->send();
+
+            return;
         }
 
-        if ($this->form->getState()['default_feed']) {
+        $settings->site_maintenance_mode = $maintenanceMode;
+        $settings->save();
+
+        if ($state['default_feed'] ?? null) {
             Artisan::call('config:clear');
 
-            Config::write('alma.default_feed', $this->form->getState()['default_feed']);
+            Config::write('bianity.default_feed', $state['default_feed']);
         }
 
-        if ($this->form->getState()['default_font']) {
+        if ($state['default_font'] ?? null) {
             Artisan::call('config:clear');
 
-            Config::write('alma.default_font', $this->form->getState()['default_font']);
+            Config::write('bianity.default_font', $state['default_font']);
         }
 
-        if (! is_null($this->form->getState()['site_logo'])) {
-            $settings->site_logo = $this->form->getState()['site_logo'];
+        if (! is_null($state['site_logo'] ?? null)) {
+            $settings->site_logo = $state['site_logo'];
             $settings->save();
         } else {
             if (isset($settings->site_logo) && Storage::disk(getCurrentDisk())->exists($settings->site_logo)) {
@@ -200,8 +209,8 @@ class General extends Component implements HasForms
             }
         }
 
-        if (! is_null($this->form->getState()['site_logo_dark'])) {
-            $settings->site_logo_dark = $this->form->getState()['site_logo_dark'];
+        if (! is_null($state['site_logo_dark'] ?? null)) {
+            $settings->site_logo_dark = $state['site_logo_dark'];
             $settings->save();
         } else {
             if (isset($settings->site_logo_dark) && Storage::disk(getCurrentDisk())->exists($settings->site_logo_dark)) {
@@ -212,8 +221,8 @@ class General extends Component implements HasForms
             }
         }
 
-        if (! is_null($this->form->getState()['site_favicon'])) {
-            $settings->site_favicon = $this->form->getState()['site_favicon'];
+        if (! is_null($state['site_favicon'] ?? null)) {
+            $settings->site_favicon = $state['site_favicon'];
             $settings->save();
         } else {
             if (isset($settings->site_favicon) && Storage::disk(getCurrentDisk())->exists($settings->site_favicon)) {

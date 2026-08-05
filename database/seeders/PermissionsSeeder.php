@@ -10,32 +10,36 @@ class PermissionsSeeder extends Seeder
 {
     public function run()
     {
-        Permission::query()->create([
+        Permission::query()->updateOrCreate(['name' => 'access_admin_dashboard', 'guard_name' => 'web'], [
             'name' => 'access_admin_dashboard',
+            'guard_name' => 'web',
             'group_name' => 'system',
             'display_name' => __('Access Admin Dashboard'),
             'description' => __('This permission allow user to access to the admin dashboard.'),
             'can_be_removed' => false,
         ]);
 
-        Permission::query()->create([
+        Permission::query()->updateOrCreate(['name' => 'access_settings', 'guard_name' => 'web'], [
             'name' => 'access_settings',
+            'guard_name' => 'web',
             'group_name' => 'system',
             'display_name' => __('Access Settings'),
             'description' => __('This permission allow user to view the settings page.'),
             'can_be_removed' => false,
         ]);
 
-        Permission::query()->create([
+        Permission::query()->updateOrCreate(['name' => 'access_contact_form_messages', 'guard_name' => 'web'], [
             'name' => 'access_contact_form_messages',
+            'guard_name' => 'web',
             'group_name' => 'system',
             'display_name' => __('Access Contact Form Messages'),
             'description' => __('This permission allow user to view the messages page.'),
             'can_be_removed' => false,
         ]);
 
-        Permission::query()->create([
+        Permission::query()->updateOrCreate(['name' => 'add_featured_story', 'guard_name' => 'web'], [
             'name' => 'add_featured_story',
+            'guard_name' => 'web',
             'group_name' => 'system',
             'display_name' => __('Mark story to featured'),
             'description' => __('This permission allow user to add story to featured collection.'),
@@ -55,13 +59,13 @@ class PermissionsSeeder extends Seeder
         $administrator->permissions()->sync($permissions->pluck('id')->all());
 
         $roleModerator = Role::findByName('moderator');
-        $roleModerator->givePermissionTo('view_stories', 'read_stories', 'add_stories', 'edit_stories', 'delete_stories', 'view_comments', 'read_comments', 'add_comments', 'edit_comments', 'delete_comments', 'add_communities');
+        $roleModerator->givePermissionTo('access_admin_dashboard', 'view_stories', 'read_stories', 'add_stories', 'edit_stories', 'delete_stories', 'view_comments', 'read_comments', 'add_comments', 'edit_comments', 'delete_comments', 'add_communities');
 
         $roleEditor = Role::findByName('editor');
-        $roleEditor->givePermissionTo('view_stories', 'read_stories', 'add_stories', 'edit_stories', 'delete_stories', 'view_comments', 'read_comments', 'add_comments', 'edit_comments', 'delete_comments', 'add_communities', 'add_featured_story');
+        $roleEditor->givePermissionTo('access_admin_dashboard', 'view_stories', 'read_stories', 'add_stories', 'edit_stories', 'delete_stories', 'view_comments', 'read_comments', 'add_comments', 'edit_comments', 'delete_comments', 'add_communities', 'add_featured_story');
 
         $roleAuthor = Role::findByName('author');
-        $roleAuthor->givePermissionTo('view_stories', 'read_stories', 'add_stories', 'edit_stories', 'delete_stories', 'view_comments', 'read_comments', 'add_comments', 'edit_comments', 'delete_comments', 'add_communities');
+        $roleAuthor->givePermissionTo('access_admin_dashboard', 'view_stories', 'read_stories', 'add_stories', 'edit_stories', 'delete_stories', 'view_comments', 'read_comments', 'add_comments', 'edit_comments', 'delete_comments', 'add_communities');
 
         $roleAuthor = Role::findByName('user');
         $roleAuthor->givePermissionTo('view_stories', 'read_stories', 'view_comments', 'read_comments', 'add_comments', 'edit_comments', 'delete_comments');

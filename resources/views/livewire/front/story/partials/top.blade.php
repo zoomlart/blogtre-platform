@@ -11,7 +11,7 @@
             @endisset
             <div class="flex items-center">
                 <span class="mr-1">{{ __('Published in') }}</span>
-                <a href="{{ route('community.show', ['comunity' => $story->community->slug]) }}"
+                <a href="{{ route('community.show', ['community' => $story->community->slug]) }}"
                     class="block min-w-[90px] font-bold text-primary-600"> {{ $story->community->name }}</a>
             </div>
         </div>

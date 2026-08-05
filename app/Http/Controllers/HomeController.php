@@ -13,7 +13,7 @@ class HomeController extends Controller
 {
     public function popular(SeoSettings $seoSettings)
     {
-        if (config('alma.default_feed') === 'popular') {
+        if (config('bianity.default_feed') === 'popular') {
             SEOMeta::addMeta('csrf-token', csrf_token(), 'name');
             SEOMeta::addMeta('viewport', 'width=device-width, initial-scale=1', 'name');
             SEOMeta::addMeta('X-UA-Compatible', 'IE=edge,chrome=1', 'http-equiv');
@@ -78,7 +78,7 @@ class HomeController extends Controller
 
     public function latest(SeoSettings $seoSettings)
     {
-        if (config('alma.default_feed') === 'latest') {
+        if (config('bianity.default_feed') === 'latest') {
             SEOMeta::addMeta('csrf-token', csrf_token(), 'name');
             SEOMeta::addMeta('viewport', 'width=device-width, initial-scale=1', 'name');
             SEOMeta::addMeta('X-UA-Compatible', 'IE=edge,chrome=1', 'http-equiv');

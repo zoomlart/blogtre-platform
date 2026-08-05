@@ -295,7 +295,13 @@ class Edit extends Component
     public function removePoll($id)
     {
         $poll = Poll::find($id);
+        if (! $poll) {
+            return;
+        }
+
         $poll->delete();
+        $this->story->refresh();
+        $this->story->load('poll');
 
         $this->addPoll = true;
         $this->notification()->success(

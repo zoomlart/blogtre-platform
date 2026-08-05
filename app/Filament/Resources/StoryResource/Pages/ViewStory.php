@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\StoryResource\Pages;
 
 use App\Filament\Resources\StoryResource;
+use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 
 class ViewStory extends ViewRecord
@@ -11,6 +12,9 @@ class ViewStory extends ViewRecord
 
     protected function getHeaderActions(): array
     {
-        return [];
+        return [
+            Actions\EditAction::make(),
+            Actions\DeleteAction::make(),
+        ];
     }
 }

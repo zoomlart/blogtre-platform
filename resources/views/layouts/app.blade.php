@@ -9,7 +9,7 @@
     @if ((new \Jenssegers\Agent\Agent())->isMobile())
         @include('layouts.partials.sidebar')
     @endif
-    @if ($advancedSettings->banner_after_content !== '')
+    @if ($advancedSettings->banner_above_header !== '')
         <section>{!! $advancedSettings->banner_above_header !!}</section>
     @endif
     @include('components.alert')

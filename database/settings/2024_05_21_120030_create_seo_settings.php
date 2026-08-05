@@ -8,6 +8,10 @@ class CreateSeoSettings extends SettingsMigration
     {
         $this->migrator->add('seo.meta_title', 'Bianity demo');
         $this->migrator->add('seo.meta_description', 'Bianity demo meta description');
+        $this->migrator->add('seo.meta_keywords', 'bianity,demo,blog');
+        $this->migrator->add('seo.og_site_name', 'Bianity');
+        $this->migrator->add('seo.og_title', 'Bianity demo');
+        $this->migrator->add('seo.og_description', 'Bianity demo meta description');
         $this->migrator->add('seo.og_url', 'https://bianity.me/');
         $this->migrator->add('seo.og_type', 'website');
         $this->migrator->add('seo.og_image', '');

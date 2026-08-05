@@ -1,6 +1,6 @@
 <div
     class="fixed bottom-0 left-0 right-0 z-0 flex h-14 items-center justify-around border-t border-gray-200 bg-white px-4 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 sm:hidden">
-    @if (config('alma.default_feed') === 'popular')
+    @if (config('bianity.default_feed') === 'popular')
         <a href="{{ route('home') }}"
             class="@if (request()->routeIs('home')) text-primary-500 @endif flex h-full w-full items-center justify-center">
             <x-icons.home class="h-8 w-8" />

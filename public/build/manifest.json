@@ -2,19 +2,19 @@
   "__commonjsHelpers-725317a4.js": {
     "file": "assets/_commonjsHelpers-725317a4.js"
   },
-  "_livewire.esm-fe689d8d.js": {
-    "file": "assets/livewire.esm-fe689d8d.js",
+  "_livewire.esm-2a69093a.js": {
+    "file": "assets/livewire.esm-2a69093a.js",
     "imports": [
       "__commonjsHelpers-725317a4.js"
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/app-bfd509e2.css",
+    "file": "assets/app-0e482d99.css",
     "isEntry": true,
     "src": "resources/css/app.css"
   },
   "resources/css/filament/cp/theme.css": {
-    "file": "assets/theme-9f9b664f.css",
+    "file": "assets/theme-f35c300a.css",
     "isEntry": true,
     "src": "resources/css/filament/cp/theme.css"
   },
@@ -24,9 +24,9 @@
     "src": "resources/css/tagify.css"
   },
   "resources/js/app.js": {
-    "file": "assets/app-080ec996.js",
+    "file": "assets/app-841dc433.js",
     "imports": [
-      "_livewire.esm-fe689d8d.js",
+      "_livewire.esm-2a69093a.js",
       "__commonjsHelpers-725317a4.js"
     ],
     "isEntry": true,
@@ -45,9 +45,9 @@
     "src": "resources/js/cropper.js"
   },
   "resources/js/editor.js": {
-    "file": "assets/editor-9e9bb1d1.js",
+    "file": "assets/editor-b65ca453.js",
     "imports": [
-      "_livewire.esm-fe689d8d.js",
+      "_livewire.esm-2a69093a.js",
       "__commonjsHelpers-725317a4.js"
     ],
     "isEntry": true,

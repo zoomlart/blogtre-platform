@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\StoryResource\Pages;
 
 use App\Filament\Resources\StoryResource;
+use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListStories extends ListRecords
@@ -11,6 +12,8 @@ class ListStories extends ListRecords
 
     protected function getHeaderActions(): array
     {
-        return [];
+        return [
+            Actions\CreateAction::make(),
+        ];
     }
 }

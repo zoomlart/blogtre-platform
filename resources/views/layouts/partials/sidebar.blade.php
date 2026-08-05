@@ -45,7 +45,7 @@
                 </div>
                 <nav class="justify-start">
                     <div class="mx-2" wire:ignore>
-                        @if (config('alma.default_feed') === 'popular')
+                        @if (config('bianity.default_feed') === 'popular')
                             {{-- Popular - Home page --}}
                             <a href="{{ route('home') }}"
                                 class="{{ request()->routeIs('home') ? 'bg-white dark:bg-slate-800' : '' }} group mb-3 flex items-center rounded-md px-4 py-2.5 text-lg font-semibold text-gray-900 transition duration-300 ease-in-out hover:bg-white/60 dark:text-slate-200 dark:hover:bg-slate-800"

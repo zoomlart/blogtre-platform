@@ -12,7 +12,11 @@ class PreventRequestsDuringMaintenance extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        'admin/*',
-        'livewire/message/*',
+        'cp',
+        'cp/*',
+        'livewire/update',
+        'livewire/upload-file',
+        'livewire/preview-file/*',
+        'livewire/livewire.js',
     ];
 }

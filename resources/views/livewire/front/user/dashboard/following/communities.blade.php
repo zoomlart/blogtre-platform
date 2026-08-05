@@ -14,7 +14,7 @@
                 @forelse($followings as $following)
                     <div class="shadow-xs rounded-md bg-white p-2 dark:bg-slate-800">
                         <a class="flex items-center rounded p-5 transition duration-300 ease-in-out hover:bg-primary-50 hover:text-primary-500 dark:text-slate-200 dark:hover:bg-primary-900 dark:hover:bg-opacity-20 hover:dark:text-primary-500"
-                            href="{{ route('community.show', $following->followable->name) }}">
+                            href="{{ route('community.show', ['community' => $following->followable->slug]) }}">
                             <div class="flex items-center">
                                 <img class="mr-5 h-14 w-14 rounded shadow-sm"
                                     src="{{ $following->followable->getAvatar() }}"

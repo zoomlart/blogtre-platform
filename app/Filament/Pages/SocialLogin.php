@@ -13,6 +13,11 @@ class SocialLogin extends Page
 
     protected static string $view = 'filament.pages.social-login';
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->can('access_settings') ?? false;
+    }
+
     public static function getNavigationGroup(): ?string
     {
         return __('Settings');

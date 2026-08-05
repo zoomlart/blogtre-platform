@@ -14,6 +14,8 @@ class StorySeeder extends Seeder
      */
     public function run()
     {
-        Story::factory(40)->existing()->create();
+        if (Story::query()->count() === 0) {
+            Story::factory(40)->existing()->create();
+        }
     }
 }

@@ -49,7 +49,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/following/communities', [DashboardController::class, 'followingCommunities'])->name('user.dashboard.following.communities');
 });
 
-if (config('alma.default_feed') === 'popular') {
+if (config('bianity.default_feed') === 'popular') {
     Route::get('/', [HomeController::class, 'popular'])->name('home');
     Route::get('/latest', [HomeController::class, 'latest'])->name('latest');
 } else {

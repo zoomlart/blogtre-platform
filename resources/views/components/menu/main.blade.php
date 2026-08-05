@@ -1,7 +1,7 @@
 @if ((new \Jenssegers\Agent\Agent())->isDesktop() || (new \Jenssegers\Agent\Agent())->isTablet())
     <nav class="sticky top-20 hidden md:block" wire:ignore>
         <div class="mx-1">
-            @if (config('alma.default_feed') === 'popular')
+            @if (config('bianity.default_feed') === 'popular')
                 {{-- Popular Stories --}}
                 <a href="{{ route('home') }}"
                     class="{{ request()->routeIs('home') ? 'bg-white dark:bg-slate-800' : '' }} group mb-1 flex items-center rounded-md px-4 py-2.5 text-base font-semibold text-gray-900 transition duration-300 ease-in-out hover:bg-white/60 dark:text-slate-200 dark:hover:bg-slate-800"

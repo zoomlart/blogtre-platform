@@ -68,7 +68,7 @@ module.exports = {
             },
             gridTemplateColumns: {
                 header: "240px minmax(0, 660px) minmax(140px, 323px)",
-                main: "240px 2fr 1fr",
+                main: "240px 2fr 320px",
                 "main-md": "2fr 5fr",
             },
         },

@@ -25,7 +25,7 @@ class PWA extends Component implements HasForms
     public function mount(): void
     {
         $settings = [
-            'pwa_active' => config('alma.pwa_active'),
+            'pwa_active' => config('bianity.pwa_active'),
             'name' => config('pwa.name'),
             'manifest_name' => config('pwa.manifest.name'),
             'short_name' => config('pwa.manifest.short_name'),
@@ -143,7 +143,7 @@ class PWA extends Component implements HasForms
         if ($this->form->getState()['pwa_active']) {
             Artisan::call('config:clear');
 
-            Config::write('alma.pwa_active', $this->form->getState()['pwa_active']);
+            Config::write('bianity.pwa_active', $this->form->getState()['pwa_active']);
             Config::write('pwa.name', $this->form->getState()['name']);
             Config::write('pwa.manifest.name', $this->form->getState()['manifest_name']);
             Config::write('pwa.manifest.short_name', $this->form->getState()['short_name']);
@@ -163,7 +163,7 @@ class PWA extends Component implements HasForms
             Config::write('pwa.manifest.icons.384x384.path', $this->form->getState()['icon_384']);
             Config::write('pwa.manifest.icons.512x512.path', $this->form->getState()['icon_512']);
         } else {
-            Config::write('alma.pwa_active', $this->form->getState()['pwa_active']);
+            Config::write('bianity.pwa_active', $this->form->getState()['pwa_active']);
         }
 
         Notification::make()

@@ -7,7 +7,7 @@
 <link rel="shortcut icon"
     href="{{ $generalSettings->site_favicon ? Storage::disk(getCurrentDisk())->url($generalSettings->site_favicon) : asset('images/favicon.png') }}"
     type="image/png">
-@if (config('alma.pwa_active') === true)
+@if (config('bianity.pwa_active') === true)
     @include('layouts.partials.pwa')
 @endif
 <script>
@@ -21,12 +21,12 @@
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family={{ config('alma.default_font') }}:wght@400;600;700&display=swap">
+    href="https://fonts.googleapis.com/css2?family={{ config('bianity.default_font') }}:wght@400;600;700&display=swap">
 
 <!-- Styles -->
 <style>
     .font-sans {
-        font-family: @php echo config('alma.default_font')
+        font-family: @php echo config('bianity.default_font')
     @endphp
     ,
     sans-serif !important;
