@@ -15,3 +15,5 @@ yarn-error.log
 /.editorconfig
 /plugin.txt
 /todo.txt
+composer.lock
+package-lock.json
